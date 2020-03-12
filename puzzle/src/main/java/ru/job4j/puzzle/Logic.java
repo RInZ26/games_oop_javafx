@@ -5,6 +5,7 @@ import ru.job4j.puzzle.firuges.Figure;
 
 import java.util.Arrays;
 
+
 /**
  * //TODO add comments.
  *
@@ -71,6 +72,14 @@ public class Logic {
     public boolean isWin() {
         int[][] table = this.convert();
         boolean result = false;
+        int [] diagArray = getDiagonal(table);
+        int winSymbol = 1;
+            for (int c = 0; c < table.length; c++) {
+                if (diagArray[c] == winSymbol && (checkHorizontal(table, c, winSymbol) || checkVertical(table, c, winSymbol))) {
+                    result = true;
+                    break;
+                }
+            }
         return result;
     }
 
@@ -85,6 +94,55 @@ public class Logic {
             }
         }
         return table;
+    }
+
+    /**
+     * Мой нагло украденный Matrix.checkHorizontal
+     * @param matrix проверяемая матрица
+     * @param index индекс горизонтали
+     * @param symbol символ на который проверяем
+     * @return true - array заполнен symbol, false - нет
+     */
+    private boolean checkHorizontal(int[][] matrix, int index, int symbol) {
+        boolean isRight = true;
+            for (int i : matrix[index]) {
+                if (i!= symbol) {
+                    isRight = false;
+                    break;
+                }
+            }
+        return isRight;
+    }
+
+    /**
+     * Мой еще наглее украденный Matrix.checkVertical
+     * @param matrix проверяемая матрица
+     * @param index индекс вертикали
+     * @param symbol символ на который проверяем
+     * @return true - array заполнен symbol, false - нет
+     */
+    private boolean checkVertical(int[][] matrix, int index, int symbol) {
+        boolean isRight = true;
+            for (int c = 0; c < matrix.length; c++) {
+                if (matrix[c][index] != symbol) {
+                    isRight = false;
+                    break;
+                }
+            }
+        return isRight;
+    }
+
+    /**
+     * Берем диагональ как и раньше
+     * @param matrix КВАДРАТНАЯ матрица
+     * @return матрица из элементов главной диагонали матрицы
+     */
+    private int[] getDiagonal (int[][] matrix) {
+        int[] array = new int[matrix.length];
+            for (int c = 0; c < matrix.length; c++) {
+                array[c] = matrix[c][c];
+            }
+        return array;
     }
 
     @Override
