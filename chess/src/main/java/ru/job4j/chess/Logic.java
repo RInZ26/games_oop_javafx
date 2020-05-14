@@ -27,18 +27,28 @@ public class Logic {
 	if (index != -1) {
 	    Cell[] steps = this.figures[index].way(source, dest);
 	    if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
-		for (Cell step : steps) {
-		    if (findBy(step) != -1) {
-                        rst = false;
-                        this.figures[index] = this.figures[index].copy(source);
-                        return rst;
-		    }
-		}
-		rst = true;
-		this.figures[index] = this.figures[index].copy(dest);
+		rst = isWayFree(steps);
+		this.figures[index] =  rst ?  this.figures[index].copy(dest) : this.figures[index].copy(source);
 	    }
 	}
 	return rst;
+    }
+
+    /**
+     * Проверка, что клетки в массиве не заняты
+     *
+     * @param cells - множество точек на пути фигуры
+     * @return на клетках ничего нет ? true : false
+     */
+    public boolean isWayFree(Cell[] cells) {
+	boolean result = true;
+	for (Cell cell : cells) {
+	    if (findBy(cell) != -1) {
+		result = false;
+		break;
+	    }
+	}
+	return result;
     }
 
     public void clean() {
