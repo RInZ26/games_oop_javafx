@@ -26,35 +26,38 @@ public class Logic3T {
 
     /**
      * Проверка в цикле всех вертикалей и горизонталей, иначе результат вычисляется из диагоналей
+     *
      * @return есть/нет
      */
     public boolean isWinnerX() {
-	for (int c = 0; c < table.length; c++) {
-	    if (fillBy(Figure3T::hasMarkX, c, 0, 0, 1)
-		    || fillBy(Figure3T::hasMarkX, 0, c, 1, 0)) {
-		return true;
-	    }
-	}
-	return fillBy(Figure3T::hasMarkX, 0, 0, 1, 1)
-		|| fillBy(Figure3T::hasMarkX, 0, 2, 1, -1);
+	return isWin(Figure3T::hasMarkX);
     }
 
     /**
      * Проверка в цикле всех вертикалей и горизонталей, иначе результат вычисляется из диагоналей
+     *
      * @return есть/нет
      */
     public boolean isWinnerO() {
-        for (int c = 0; c < table.length; c++) {
-            if (fillBy(Figure3T::hasMarkO, c, 0, 0, 1)
-                    || fillBy(Figure3T::hasMarkO, 0, c, 1, 0)) {
-                return true;
-            }
-        }
-        return fillBy(Figure3T::hasMarkO, 0, 0, 1, 1)
-                || fillBy(Figure3T::hasMarkO, 0, 2, 1, -1);
+	return isWin(Figure3T::hasMarkO);
+    }
+
+    /**
+     * Проверка на победителя
+     * @return true : false
+     */
+    public boolean isWin(Predicate<Figure3T> isWinner) {
+	for (int c = 0; c < table.length; c++) {
+	    if (fillBy(isWinner, c, 0, 0, 1)
+		    || fillBy(isWinner, 0, c, 1, 0)) {
+		return true;
+	    }
+	}
+	return fillBy(isWinner, 0, 0, 1, 1)
+		|| fillBy(isWinner, 0, 2, 1, -1);
     }
 
     public boolean hasGap() {
-        return (Arrays.stream(table).flatMap(Arrays::stream).anyMatch(cell -> !cell.hasMarkX() && !cell.hasMarkO()));
+	return (Arrays.stream(table).flatMap(Arrays::stream).anyMatch(cell -> !cell.hasMarkX() && !cell.hasMarkO()));
     }
 }
